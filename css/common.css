@@ -1,0 +1,52 @@
+/* Moved from index.php */
+* {
+  font-family: 'Poppins', 'sans-sarif';
+}
+
+.h-font {
+  font-family: "Merienda", cursive;
+}
+
+/* CSS to hide number input spinners */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+/* Added this class based on your HTML.
+  This is a common color in the videos.
+*/
+.custom-bg {
+  background-color: #2ec1ac;
+  border: 1px solid #2ec1ac;
+}
+
+.custom-bg:hover {
+  background-color: #279e8c;
+  border-color: #279e8c;
+}
+
+/* Moved from index.php to fix main slider */
+.swiper-container {
+  width: 100%;
+  height: 450px;
+}
+
+.swiper-slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.swiper-pagination-bullet-active {
+  background-color: #343a40;
+}
+
+    .custom-bg{
+      background-color: #2ec1ec;
+    }
