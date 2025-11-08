@@ -46,16 +46,16 @@
             <a class="nav-link active" aria-current="page" href="#">Home</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link me-2" href="#">Rooms</a>
+            <a class="nav-link me-2" href="room.php">Rooms</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link me-2" href="#">Facilites</a>
+            <a class="nav-link me-2" href="facilities.php">Facilites</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link me-2" href="#">Contact Us</a>
+            <a class="nav-link me-2" href="contact.php">Contact Us</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">About</a>
+            <a class="nav-link" href="about.php">About</a>
           </li>
         </ul>
         <form class="d-flex" role="search">
