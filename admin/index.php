@@ -1,5 +1,38 @@
 <?php 
-  include "inc/db_config.php"
+  // (VII) Include essentials first to start session
+  include "inc/essentials.php";
+  include "inc/db_config.php";
+
+  // (IX) Check if user is already logged in, redirect to dashboard
+  if(isset($_SESSION['adminLogin']) && $_SESSION['adminLogin'] == true){
+    redirect('dashboard.php');
+  }
+?>
+<?php 
+  if(isset($_POST['login'])){
+    $flr_data = filteration($_POST);
+    $query = "SELECT * FROM `admin_cred` WHERE `admin_name`=? AND `admin_pass`=?";
+    $values = [$flr_data['admin_name'],$flr_data['admin_pass']];
+    $res = select($query,$values,"ss");
+    if ($res->num_rows==1) {
+      // (VII) Successful Login: Fetch user data
+      $row = mysqli_fetch_assoc($res);
+      
+      // (VII) Set session variables
+      $_SESSION['adminLogin'] = true;
+      $_SESSION['adminId'] = $row['sr_no']; // Use sr_no as per your steps
+
+      // (VII) Regenerate session ID
+      session_regenerate_id(true);
+
+      // (VII) Redirect to dashboard
+      redirect('dashboard.php');
+    } else {
+      alert("erorr",'Login Failed - INVALID Credentials!');
+    }
+    
+
+  }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -126,20 +159,20 @@
         background: rgba(255, 255, 255, 0.08);
         border: 1px solid rgba(255, 255, 255, 0.15);
         border-radius: 10px;
-        color: #fff !important;              /* Ensures text always visible */
-        caret-color: #fff;                   /* White blinking cursor */
+        color: #fff !important;           /* Ensures text always visible */
+        caret-color: #fff;                /* White blinking cursor */
         transition: all 0.3s ease;
       }
 
       .form-control::placeholder {
-        color: rgba(255, 255, 255, 0.6);     /* Slightly visible placeholder */
+        color: rgba(255, 255, 255, 0.6);    /* Slightly visible placeholder */
       }
 
       .form-control:focus {
         border-color: #fff;
         background: rgba(255, 255, 255, 0.12); /* Slightly brighter while typing */
         box-shadow: 0 0 10px rgba(255, 255, 255, 0.25);
-        color: #fff;                          /* Keeps text visible during typing */
+        color: #fff;                       /* Keeps text visible during typing */
       }
 
 
@@ -239,9 +272,3 @@
   <?php require('inc/script.php'); ?>
 </body>
 </html>
-<?php 
-  if(isset($_POST['login'])){
-    $flr_data = filteration($_POST);
-    
-  }
-?>

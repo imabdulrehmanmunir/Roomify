@@ -1,6 +1,6 @@
 /* Moved from index.php */
 * {
-  font-family: 'Poppins', 'sans-sarif';
+  font-family: "Poppins", "sans-sarif";
 }
 
 .h-font {
@@ -14,12 +14,12 @@ input::-webkit-inner-spin-button {
   margin: 0;
 }
 
-input[type=number] {
+input[type="number"] {
   -moz-appearance: textfield;
 }
 
 /* Added this class based on your HTML.
-  This is a common color in the videos.
+   This is a common color in the videos.
 */
 .custom-bg {
   background-color: #2ec1ac;
@@ -47,6 +47,32 @@ input[type=number] {
   background-color: #343a40;
 }
 
-    .custom-bg{
-      background-color: #2ec1ec;
-    }
+.custom-bg {
+  background-color: #2ec1ec;
+}
+.custom-alert{
+  position: fixed;
+  top: 30px ;
+  right: 25px;
+  /* UPDATED: Added width properties */
+  max-width: 400px;
+  width: auto;
+  z-index: 1100; /* Ensure it's on top */
+}
+
+/* (II) New Sidebar Styles */
+#dashboard-menu {
+  position: fixed;
+  height: 100%;
+}
+
+/* (II) Responsive Fixes for Sidebar */
+@media screen and (max-width: 991px) {
+  #dashboard-menu {
+    height: auto;
+    width: 100%;
+  }
+  #main-content {
+    margin-top: 60px; /* Adjust as needed */
+  }
+}
