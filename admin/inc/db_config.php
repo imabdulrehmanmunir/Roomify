@@ -1,7 +1,7 @@
 <?php
 // Database configuration
 
-$DB_HOST = 'localhost:3307';
+$DB_HOST = 'localhost:3308';
 $DB_USER = 'root';
 $DB_PASS = '';
 $DB_NAME = 'roomify';
@@ -18,8 +18,9 @@ function filteration($data){
         $data[$key] = stripcslashes($value);
         $data[$key] = htmlspecialchars($value);
         $data[$key] = strip_tags($value);
-        return $data;
+        // (FIX) The return statement was moved from inside the loop to outside
     }
+    return $data;
 }
 function select($sql, $values, $datatypes)
 {
