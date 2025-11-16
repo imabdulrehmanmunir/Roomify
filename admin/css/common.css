@@ -73,3 +73,21 @@ input::-webkit-inner-spin-button {
     margin-top: 60px; /* Adjust as needed */
   }
 }
+#dashboard-menu {
+z-index: 1000; /* Ensures it stays above other content */
+}
+
+/* NEW: Custom scrollbar styles */
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: #f1f1f1; 
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(46, 193, 172, 0.8); /* Using your custom-bg color */
+  border-radius: 5px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #555; 
+}

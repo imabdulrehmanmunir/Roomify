@@ -33,6 +33,8 @@
             <li class="nav-item">
               <a class="nav-link text-white" href="#"><i class="bi bi-door-closed-fill me-1"></i> Rooms</a>
             </li>
+            <a class="nav-link text-white" href="users_queries.php"><i class="bi bi-people-fill me-1"></i> User Queries</a>
+            </li>
             <li class="nav-item">
               <a class="nav-link text-white" href="carousel.php"><i class="bi bi-images me-1"></i> Carousels</a>
             </li>
