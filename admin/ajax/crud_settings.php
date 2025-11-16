@@ -1,6 +1,6 @@
 <?php
 // Include config and essentials
-require('../inc/db_config.php');
+require_once('../inc/db_config.php');
 require('../inc/essentials.php');
 
 // Check if admin is logged in

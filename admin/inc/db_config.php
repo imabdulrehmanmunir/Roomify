@@ -1,142 +1,133 @@
 <?php
-// Database Configuration
+// Database configuration
+
 $DB_HOST = 'localhost:3308';
 $DB_USER = 'root';
 $DB_PASS = '';
 $DB_NAME = 'roomify';
 
-// Create Database Connection
+// Create database connection
 $conn = new mysqli($DB_HOST, $DB_USER, $DB_PASS, $DB_NAME);
 
-// Check Connection
+// Check connection
 if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+  die("Connection failed: " . mysqli_connect_error());
 }
 
-
-// Data Sanitization Function
 function filteration($data)
 {
-    foreach ($data as $key => $value) {
-        $value = trim($value);
-        $value = stripslashes($value);
-        $value = htmlspecialchars($value);
-        $value = strip_tags($value);
+  foreach ($data as $key => $value) {
+    // MODIFIED: Trim value first and re-assign
+    $value = trim($value);
+    // MODIFIED: Moved strip_tags before htmlspecialchars
+    $value = strip_tags($value);
+    $value = stripcslashes($value);
+    $value = htmlspecialchars($value);
 
-        $data[$key] = $value;
-    }
-    return $data;
+    // Assign the fully filtered value back to the array
+    $data[$key] = $value;
+  }
+  return $data;
 }
 
-
-// SELECT Query Function
 function select($sql, $values, $datatypes)
 {
-    $conn = $GLOBALS['conn'];
+  $conn = $GLOBALS['conn'];
 
-    if ($stmt = mysqli_prepare($conn, $sql)) {
+  if ($stmt = mysqli_prepare($conn, $sql)) {
 
-        if (!empty($values)) {
-            mysqli_stmt_bind_param($stmt, $datatypes, ...$values);
-        }
-
-        if (mysqli_stmt_execute($stmt)) {
-            $res = mysqli_stmt_get_result($stmt);
-            mysqli_stmt_close($stmt);
-            return $res;
-        } else {
-            mysqli_stmt_close($stmt);
-            die("Query cannot be executed - SELECT");
-        }
-
-    } else {
-        die("Query cannot be executed - SELECT");
+    // Bind parameters (only if provided)
+    if (!empty($values)) {
+      mysqli_stmt_bind_param($stmt, $datatypes, ...$values);
     }
+    // Execute the statement
+    if (mysqli_stmt_execute($stmt)) {
+      // Get the result set
+      $res = mysqli_stmt_get_result($stmt);
+      mysqli_stmt_close($stmt);
+      return $res;
+    } else {
+      mysqli_stmt_close($stmt);
+      die("Query cannot be executed - SELECT");
+    }
+
+  } else {
+    die("Query cannot be executed - Select");
+  }
 }
 
-
-// UPDATE Query Function
+// (VI) New Update Function
 function update($sql, $values, $datatypes)
 {
-    $conn = $GLOBALS['conn'];
+  $conn = $GLOBALS['conn'];
 
-    if ($stmt = mysqli_prepare($conn, $sql)) {
-        mysqli_stmt_bind_param($stmt, $datatypes, ...$values);
-
-        if (mysqli_stmt_execute($stmt)) {
-            $res = mysqli_stmt_affected_rows($stmt);
-            mysqli_stmt_close($stmt);
-            return $res;
-        } else {
-            mysqli_stmt_close($stmt);
-            die("Query cannot be executed - UPDATE");
-        }
-
+  if ($stmt = mysqli_prepare($conn, $sql)) {
+    mysqli_stmt_bind_param($stmt, $datatypes, ...$values);
+    if (mysqli_stmt_execute($stmt)) {
+      // (VI) Use mysqli_stmt_affected_rows
+      $res = mysqli_stmt_affected_rows($stmt);
+      mysqli_stmt_close($stmt);
+      return $res;
     } else {
-        die("Query cannot be executed - UPDATE");
+      mysqli_stmt_close($stmt);
+      die("Query cannot be executed - UPDATE");
     }
+  } else {
+    die("Query cannot be executed - Update");
+  }
 }
 
-
-// INSERT Query Function
+// NEW: Insert Function
 function insert($sql, $values, $datatypes)
 {
-    $conn = $GLOBALS['conn'];
+  $conn = $GLOBALS['conn'];
 
-    if ($stmt = mysqli_prepare($conn, $sql)) {
-        mysqli_stmt_bind_param($stmt, $datatypes, ...$values);
-
-        if (mysqli_stmt_execute($stmt)) {
-            $res = mysqli_stmt_affected_rows($stmt);
-            mysqli_stmt_close($stmt);
-            return $res;
-        } else {
-            mysqli_stmt_close($stmt);
-            die("Query cannot be executed - INSERT");
-        }
-
+  if ($stmt = mysqli_prepare($conn, $sql)) {
+    mysqli_stmt_bind_param($stmt, $datatypes, ...$values);
+    if (mysqli_stmt_execute($stmt)) {
+      $res = mysqli_stmt_affected_rows($stmt);
+      mysqli_stmt_close($stmt);
+      return $res;
     } else {
-        die("Query cannot be executed - INSERT");
+      mysqli_stmt_close($stmt);
+      die("Query cannot be executed - INSERT");
     }
+  } else {
+    die("Query cannot be executed - Insert");
+  }
 }
 
-
-// DELETE Query Function
+// NEW: Delete Function
 function delete($sql, $values, $datatypes)
 {
-    $conn = $GLOBALS['conn'];
+  $conn = $GLOBALS['conn'];
 
-    if ($stmt = mysqli_prepare($conn, $sql)) {
-        mysqli_stmt_bind_param($stmt, $datatypes, ...$values);
-
-        if (mysqli_stmt_execute($stmt)) {
-            $res = mysqli_stmt_affected_rows($stmt);
-            mysqli_stmt_close($stmt);
-            return $res;
-        } else {
-            mysqli_stmt_close($stmt);
-            die("Query cannot be executed - DELETE");
-        }
-
+  if ($stmt = mysqli_prepare($conn, $sql)) {
+    mysqli_stmt_bind_param($stmt, $datatypes, ...$values);
+    if (mysqli_stmt_execute($stmt)) {
+      $res = mysqli_stmt_affected_rows($stmt);
+      mysqli_stmt_close($stmt);
+      return $res;
     } else {
-        die("Query cannot be executed - DELETE");
+      mysqli_stmt_close($stmt);
+      die("Query cannot be executed - DELETE");
     }
+  } else {
+    die("Query cannot be executed - Delete");
+  }
 }
 
-
-// SELECT ALL Rows From a Table
+// NEW: Select All Function
 function select_all($table)
 {
-    $conn = $GLOBALS['conn'];
-    $sql = "SELECT * FROM `$table`";
-
-    $res = mysqli_query($conn, $sql);
-
-    if ($res) {
-        return $res;
-    } else {
-        die("Query cannot be executed - SELECT ALL");
-    }
+  $conn = $GLOBALS['conn'];
+  $sql = "SELECT * FROM `$table`";
+  $res = mysqli_query($conn, $sql);
+  if ($res) {
+    return $res;
+  } else {
+    die("Query cannot be executed - Select All");
+  }
 }
 
 ?>
