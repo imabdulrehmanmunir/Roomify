@@ -50,3 +50,10 @@ input[type=number] {
     .custom-bg{
       background-color: #2ec1ec;
     }
+    /* NEW: Custom alert styling for frontend */
+.custom-alert {
+position: fixed;
+top: 25px;
+right: 25px;
+z-index: 1100; /* Ensure it's above other content */
+}

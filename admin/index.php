@@ -1,7 +1,7 @@
 <?php 
   // (VII) Include essentials first to start session
   include "inc/essentials.php";
-  include "inc/db_config.php";
+  require_once("inc/db_config.php");
 
   // (IX) Check if user is already logged in, redirect to dashboard
   if(isset($_SESSION['adminLogin']) && $_SESSION['adminLogin'] == true){
