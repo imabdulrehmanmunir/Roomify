@@ -298,5 +298,13 @@ data;
     </div>
   </div>
 </div>
+<script src="https://www.gstatic.com/dialogflow-console/fast/messenger/bootstrap.js?v=1"></script>
+<df-messenger
+  intent="WELCOME"
+  chat-title="HotelAssistant"
+  agent-id="d5d36255-581d-421b-a72b-4e13086fd61a"
+  language-code="en"
+></df-messenger>
+
 
 <?php require("inc/footer.php") ?>
