@@ -13,6 +13,8 @@
   define('CAROUSEL_FOLDER', 'Carousel/');
   // NEW: Specific subfolder for facility icons
   define('FACILITIES_FOLDER', 'Facilities/');
+  // NEW: Specific subfolder for room images
+  define('ROOMS_FOLDER', 'Rooms/');
   // --- END OF CORRECTIONS ---
 
 
@@ -53,7 +55,7 @@
     // Check if session is started and adminLogin is set
     if (!(isset($_SESSION['adminLogin']) && $_SESSION['adminLogin'] == true)) {
       // If not logged in, redirect to index.php
-      redirect('index.Hole');
+      redirect('index.php');
     }
   }
 
@@ -120,5 +122,4 @@
       return false; // File not found
     }
   }
-
 ?>

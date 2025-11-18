@@ -33,21 +33,21 @@ data;
   }
 }
 
-// Remove Feature Logic
 if (isset($_POST['rem_feature'])) {
-  $frm_data = filteration($_POST);
-  $values = [$frm_data['rem_feature']];
+    $frm_data = filteration($_POST);
+    $values = [$frm_data['rem_feature']];
 
-  // Placeholder for checking if feature is tied to a room
-  // $check_q = mysqli_query($conn, "SELECT * FROM `room_features` WHERE `feature_id`='$frm_data[rem_feature]'");
-  // if(mysqli_num_rows($check_q) > 0){
-  //     echo 'room_added';
-  // } else {
-  $q = "DELETE FROM `features` WHERE `id`=?";
-  $res = delete($q, $values, 'i');
-  echo $res;
-  // }
-}
+    // MODIFIED: Check if feature is tied to any room
+    $check_q = select("SELECT * FROM `room_features` WHERE `features_id`=?", $values, 'i');
+
+    if (mysqli_num_rows($check_q) > 0) {
+      echo 'room_added'; // Error code
+    } else {
+      $q = "DELETE FROM `features` WHERE `id`=?";
+      $res = delete($q, $values, 'i');
+      echo $res;
+    }
+  }
 
 // Add Facility Logic
 if (isset($_POST['add_facility'])) {
@@ -91,29 +91,21 @@ data;
   }
 }
 
-// Remove Facility Logic
-if (isset($_POST['rem_facility'])) {
-  $frm_data = filteration($_POST);
-  $values = [$frm_data['rem_facility']];
+// Remove Feature Logic
+  if (isset($_POST['rem_feature'])) {
+    $frm_data = filteration($_POST);
+    $values = [$frm_data['rem_feature']];
 
-  // 1. Get icon filename
-  $q_select = "SELECT * FROM `facilities` WHERE `id`=?";
-  $res_select = select($q_select, $values, 'i');
-  $img = mysqli_fetch_assoc($res_select);
+    // MODIFIED: Check if feature is tied to any room
+    $check_q = select("SELECT * FROM `room_features` WHERE `features_id`=?", $values, 'i');
 
-  if ($img) {
-    // 2. Delete the icon file
-    if (delete_image($img['icon'], FACILITIES_FOLDER)) {
-      // 3. Delete from DB
-      $q_delete = "DELETE FROM `facilities` WHERE `id`=?";
-      $res_delete = delete($q_delete, $values, 'i');
-      echo $res_delete;
+    if (mysqli_num_rows($check_q) > 0) {
+      echo 'room_added'; // Error code
     } else {
-      echo 0; // Image deletion failed
+      $q = "DELETE FROM `features` WHERE `id`=?";
+      $res = delete($q, $values, 'i');
+      echo $res;
     }
-  } else {
-    echo 0; // Facility not found
   }
-}
 
 ?>
