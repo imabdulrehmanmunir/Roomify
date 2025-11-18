@@ -11,6 +11,8 @@
   define('ABOUT_FOLDER', 'About/');
   // NEW: Specific subfolder for carousel images
   define('CAROUSEL_FOLDER', 'Carousel/');
+  // NEW: Specific subfolder for facility icons
+  define('FACILITIES_FOLDER', 'Facilities/');
   // --- END OF CORRECTIONS ---
 
 
@@ -51,7 +53,7 @@
     // Check if session is started and adminLogin is set
     if (!(isset($_SESSION['adminLogin']) && $_SESSION['adminLogin'] == true)) {
       // If not logged in, redirect to index.php
-      redirect('index.php');
+      redirect('index.Hole');
     }
   }
 
@@ -78,6 +80,31 @@
       }
     }
   }
+
+  // NEW: upload_svg_image function
+  function upload_svg_image($image, $folder)
+  {
+    $valid_mime = ['image/svg+xml'];
+    $img_mime = $image['type'];
+
+    if (!in_array($img_mime, $valid_mime)) {
+      return 'inv_img'; // Invalid image format
+    } else if (($image['size'] / (1024 * 1024)) > 1) { // 1MB limit for SVG
+      return 'inv_size'; // Invalid size
+    } else {
+      $ext = pathinfo($image['name'], PATHINFO_EXTENSION);
+      $rname = 'IMG_' . rand(11111, 99999) . ".$ext";
+
+      $img_path = UPLOAD_IMAGE_PATH . $folder . $rname;
+
+      if (move_uploaded_file($image['tmp_name'], $img_path)) {
+        return $rname;
+      } else {
+        return 'up_failed'; // Upload failed
+      }
+    }
+  }
+
 
   // NEW: delete_image function
   function delete_image($image, $folder)
