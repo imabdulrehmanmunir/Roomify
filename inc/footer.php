@@ -9,14 +9,15 @@
       </p>
     </div>
 
-    <div class="col-lg-4 p-4">
-      <h5 class="mb-3">Links</h5>
-      <a href="index.php" class="footer-link">Home</a><br>
-      <a href="room.php" class="footer-link">Rooms</a><br>
-      <a href="facilities.php" class="footer-link">Facilities</a><br>
-      <a href="contact.php" class="footer-link">Contact Us</a><br>
-      <a href="about.php" class="footer-link">About</a>
-    </div>
+ <!-- ... (existing code) ... -->
+    <div class="col-lg-4 p-4">
+      <h5 class="mb-3">Links</h5>
+      <a href="index.php" class="footer-link">Home</a> <br>
+      <a href="rooms.php" class="footer-link">Rooms</a> <br>
+      <a href="facilities.php" class="footer-link">Facilities</a> <br>
+      <a href="contact.php" class="footer-link">Contact Us</a> <br>
+      <a href="about.php" class="footer-link">About</a>
+    </div>
 
     <div class="col-lg-4 p-4">
       <h5 class="mb-3">Follow Us</h5>
