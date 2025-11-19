@@ -1,6 +1,7 @@
 <?php
 // (VII, IX) Start session at the very top
 session_start();
+date_default_timezone_set("Asia/Karachi"); // Set timezone for Pakistan
 
 // Base URL
 define('SITE_URL', 'http://localhost/Roomify/Roomify/'); 
@@ -16,7 +17,8 @@ define('USERS_FOLDER', 'users/');
 
 // Gmail Credentials
 define('SMTP_EMAIL', "imabdulrehmanmuneer@gmail.com"); 
-define('SMTP_PASS', "aquwgpoqabixajfc"); // Paste the App Password here
+define('SMTP_PASS', "aquw gpoq abix ajfc"); 
+define('SMTP_NAME', "Roomify"); // Centralized Name
 
 function alert($type, $msg, $position='body'){
     $bs_class = ($type == 'success') ? 'alert-success' : 'alert-danger';
@@ -135,7 +137,7 @@ function upload_user_image($image)
     }
 }
 
-// MODIFIED: PHPMailer Email Function
+// MODIFIED: PHPMailer with dynamic Types
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
@@ -147,24 +149,22 @@ function send_mail($email, $token, $type){
         $content = "confirm your email";
     } else {
         $page = 'index.php'; 
-        $subject = "Account Reset";
+        $subject = "Account Reset Link";
         $content = "reset your account";
     }
 
     $email_body = "
         Click the link below to $content: <br>
-        <a href='".SITE_URL."$page?email=$email&token=$token'>
+        <a href='".SITE_URL."$page?$type&email=$email&token=$token'>
             CLICK ME
         </a>
     ";
 
-    // Load Composer's autoloader
     require __DIR__ . '/../../vendor/autoload.php';
 
     $mail = new PHPMailer(true);
 
     try {
-        //Server settings
         $mail->isSMTP();                                            
         $mail->Host       = 'smtp.gmail.com';                     
         $mail->SMTPAuth   = true;                                   
@@ -173,11 +173,9 @@ function send_mail($email, $token, $type){
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;            
         $mail->Port       = 587;                                    
 
-        //Recipients
-        $mail->setFrom(SMTP_EMAIL, 'Roomify');
+        $mail->setFrom(SMTP_EMAIL, SMTP_NAME);
         $mail->addAddress($email);     
 
-        //Content
         $mail->isHTML(true);                                  
         $mail->Subject = $subject;
         $mail->Body    = $email_body;
