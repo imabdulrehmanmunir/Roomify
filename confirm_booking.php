@@ -62,7 +62,7 @@
             <div class="card p-3 shadow-sm rounded">
                 <img src="$room_thumb" class="img-fluid rounded mb-3" style="height: 200px; width: 100%; object-fit: cover;">
                 <h5>$room_data[name]</h5>
-                <h6>₹$room_data[price] per night</h6>
+                <h6>Rs. $room_data[price] per night</h6>
             </div>
             data;
         ?>
@@ -145,7 +145,7 @@
                 } else if(data.status == 'unavailable'){
                     pay_info.innerText = "Room not available for this date!";
                 } else {
-                    pay_info.innerHTML = "No. of Days: "+data.days+"<br>Total Amount to Pay: ₹"+data.payment;
+                    pay_info.innerHTML = "No. of Days: "+data.days+"<br>Total Amount to Pay: Rs. "+data.payment;
                     pay_info.classList.replace('text-danger', 'text-dark');
                     booking_form.elements['pay_now'].removeAttribute('disabled');
                 }

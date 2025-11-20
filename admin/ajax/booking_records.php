@@ -60,10 +60,10 @@ if(isset($_POST['get_bookings']))
             </td>
             <td>
                 <b>Room:</b> $data[room_name]<br>
-                <b>Price:</b> ₹$data[price]
+                <b>Price:</b> Rs. $data[price]
             </td>
             <td>
-                <b>Amount:</b> ₹$data[trans_amt]<br>
+                <b>Amount:</b> Rs. $data[trans_amt]<br>
                 <b>Date:</b> $date
             </td>
             <td>

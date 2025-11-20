@@ -1,15 +1,15 @@
-<?php
-  require('inc/header.php');
+<?php 
+  require('inc/header.php'); 
 
-  // NEW: Contact form submission logic
-  if (isset($_POST['send'])) {
+  if(isset($_POST['send']))
+  {
     $frm_data = filteration($_POST);
 
-    $q = "INSERT INTO `user_queries`(`name`, `email`, `subject`, `message`,`seen`) VALUES (?,?,?,?,?)";
-    $values = [$frm_data['name'], $frm_data['email'], $frm_data['subject'], $frm_data['message'],0];
+    $q = "INSERT INTO `user_queries`(`name`, `email`, `subject`, `message`) VALUES (?,?,?,?)";
+    $values = [$frm_data['name'], $frm_data['email'], $frm_data['subject'], $frm_data['message']];
 
-    $res = insert($q, $values, 'ssssi');
-    if ($res == 1) {
+    $res = insert($q, $values, 'ssss');
+    if($res == 1){
       alert('success', 'Mail sent!');
     } else {
       alert('danger', 'Server down! Try again later.');
@@ -28,43 +28,70 @@
 
 <div class="container">
   <div class="row">
-
+    
+    <!-- Contact Details & Map -->
     <div class="col-lg-6 col-md-6 mb-5 px-4">
       <div class="bg-white rounded shadow p-4">
-        <iframe class="w-100 rounded mb-4" height="320px" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15222.18128330837!2d78.4720822697754!3d17.4810086!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bcb9b02a7b8f6c3%3A0x1e36f047d5264319!2sHyderabad%2C%20Telangana%2C%20India!5e0!3m2!1sen!2sus!4v1626282855198!5m2!1sen!2sus" loading="lazy"></iframe>
+        <!-- Dynamic Google Map -->
+        <iframe class="w-100 rounded mb-4" height="320px" src="<?php echo $contact_r['gmap'] ?>" loading="lazy"></iframe>
 
+        <!-- Dynamic Address -->
         <h5>Address</h5>
-        <a href="https://maps.app.goo.gl/abcdef123456" target="_blank" class="d-inline-block text-decoration-none text-dark mb-3">
-          <i class="bi bi-geo-alt-fill"></i> 123 Roomify Lane, Luxury City, India
+        <a href="https://maps.google.com/?q=<?php echo $contact_r['address'] ?>" target="_blank" class="d-inline-block text-decoration-none text-dark mb-3">
+          <i class="bi bi-geo-alt-fill"></i> <?php echo $contact_r['address'] ?>
         </a>
 
+        <!-- Dynamic Phone Numbers -->
         <h5 class="mt-3">Call us</h5>
-        <a href="tel: +91777888999" class="d-inline-block mb-2 text-decoration-none text-dark">
-          <i class="bi bi-telephone-fill"></i> +91 777888999
+        <a href="tel: +<?php echo $contact_r['pn1'] ?>" class="d-inline-block mb-2 text-decoration-none text-dark">
+          <i class="bi bi-telephone-fill"></i> +<?php echo $contact_r['pn1'] ?>
         </a>
         <br>
-        <a href="tel: +91777888999" class="d-inline-block text-decoration-none text-dark">
-          <i class="bi bi-telephone-fill"></i> +91 777888999
-        </a>
+        <?php
+          if($contact_r['pn2'] != ''){
+            echo <<<data
+              <a href="tel: +$contact_r[pn2]" class="d-inline-block text-decoration-none text-dark">
+                <i class="bi bi-telephone-fill"></i> +$contact_r[pn2]
+              </a>
+            data;
+          }
+        ?>
 
+        <!-- Dynamic Email -->
         <h5 class="mt-3">Email</h5>
-        <a href="mailto:contact@roomify.com" class="d-inline-block text-decoration-none text-dark">
-          <i class="bi bi-envelope-fill"></i> contact@roomify.com
+        <a href="mailto:<?php echo $contact_r['email'] ?>" class="d-inline-block text-decoration-none text-dark">
+          <i class="bi bi-envelope-fill"></i> <?php echo $contact_r['email'] ?>
         </a>
 
+        <!-- Dynamic Social Links -->
         <h5 class="mt-3">Follow us</h5>
-        <a href="#" class="d-inline-block text-dark fs-5 me-2">
-          <i class="bi bi-twitter-x"></i>
-        </a>
-        <a href="#" class="d-inline-block text-dark fs-5 me-2">
-          <i class="bi bi-facebook"></i>
-        </a>
-        <a href="#" class="d-inline-block text-dark fs-5">
-          <i class="bi bi-instagram"></i>
-        </a>
+        <?php 
+          if($contact_r['tw'] != ''){
+            echo <<<data
+              <a href="$contact_r[tw]" class="d-inline-block text-dark fs-5 me-2">
+                <i class="bi bi-twitter-x"></i>
+              </a>
+            data;
+          }
+          if($contact_r['fb'] != ''){
+            echo <<<data
+              <a href="$contact_r[fb]" class="d-inline-block text-dark fs-5 me-2">
+                <i class="bi bi-facebook"></i>
+              </a>
+            data;
+          }
+          if($contact_r['insta'] != ''){
+            echo <<<data
+              <a href="$contact_r[insta]" class="d-inline-block text-dark fs-5">
+                <i class="bi bi-instagram"></i>
+              </a>
+            data;
+          }
+        ?>
       </div>
     </div>
 
+    <!-- Contact Form -->
     <div class="col-lg-6 col-md-6 px-4">
       <div class="bg-white rounded shadow p-4">
         <form method="POST">

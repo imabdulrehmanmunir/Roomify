@@ -8,13 +8,13 @@ function booking_analytics(period=1)
         let data = JSON.parse(this.responseText);
         
         document.getElementById('total_bookings').textContent = data.total_bookings;
-        document.getElementById('total_amt').textContent = '₹'+data.total_amt;
+        document.getElementById('total_amt').textContent = 'Rs. '+data.total_amt;
 
         document.getElementById('active_bookings').textContent = data.active_bookings;
-        document.getElementById('active_amt').textContent = '₹'+data.active_amt;
+        document.getElementById('active_amt').textContent = 'Rs. '+data.active_amt;
 
         document.getElementById('cancelled_bookings').textContent = data.cancelled_bookings;
-        document.getElementById('cancelled_amt').textContent = '₹'+data.cancelled_amt;
+        document.getElementById('cancelled_amt').textContent = 'Rs. '+data.cancelled_amt;
         
         // Updating Shortcuts
         document.getElementById('new_bookings').textContent = data.new_bookings;
