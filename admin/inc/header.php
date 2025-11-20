@@ -55,12 +55,22 @@
           </ul>
         </div>
       </li>
+
             <li class="nav-item">
               <a class="nav-link text-white" href="users.php">
                 <i class="bi bi-people-fill me-1"></i> Users
               </a>
             </li>
-
+          <li class="nav-item">
+              <a class="nav-link text-white" href="rate_review.php">
+                <i class="bi bi-chat-square-text-fill me-1"></i> Ratings & Reviews
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link text-white" href="carousel.php">
+                <i class="bi bi-images me-1"></i> Carousels
+              </a>
+            </li>
             <!-- Moved Rooms link down -->
             <li class="nav-item">
               <a class="nav-link text-white" href="rooms.php">
