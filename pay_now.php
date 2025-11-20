@@ -34,7 +34,9 @@
 
         $query2 = "INSERT INTO `booking_details`(`booking_id`, `room_name`, `price`, `total_pay`, `user_name`, `phonenum`, `address`) VALUES (?,?,?,?,?,?,?)";
         $values2 = [$booking_id, $_SESSION['room']['name'], $_SESSION['room']['price'], $TXN_AMOUNT, $frm_data['name'], $frm_data['phonenum'], $frm_data['address']];
-        insert($query2, $values2, 'isiiiss');
+        
+        // MODIFIED: Changed 'isiiiss' to 'isiisss' (user_name is a String, not Integer)
+        insert($query2, $values2, 'isiisss');
 
         // 2. Prepare Real Paytm Request Data (Still needed for checksum generation logic to not break)
         $paramList = array();
@@ -69,7 +71,6 @@
         ];
 
         // Build a hidden form that submits to YOUR OWN response page (CALLBACK_URL)
-        // instead of PAYTM_TXN_URL
         echo "<html>
         <head><title>Processing Mock Payment...</title></head>
         <body>
