@@ -32,7 +32,15 @@
 </head>
 
 <body class="bg-light">
-
+  <?php 
+    if ($settings_r['shutdown']) {
+        echo <<<alert
+            <div class='bg-danger text-center p-2 fw-bold text-white'>
+                <i class="bi bi-exclamation-triangle-fill"></i> Bookings are temporarily closed!
+            </div>
+        alert;
+    }
+  ?>
   <nav class="navbar navbar-expand-lg navbar-light bg-white px-lg-3 py-lg-2 shadow-sm sticky-top">
     <div class="container-fluid">
       <a class="navbar-brand me-5 fw-bold fs-3 h-font" href="index.php"><?php echo $settings_r['site_title'] ?></a>
@@ -45,7 +53,7 @@
             <a class="nav-link" href="index.php">Home</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link me-2" href="rooms.php">Rooms</a>
+            <a class="nav-link me-2" href="room.php">Rooms</a>
           </li>
           <li class="nav-item">
             <a class="nav-link me-2" href="facilities.php">Facilites</a>

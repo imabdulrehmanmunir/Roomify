@@ -31,8 +31,18 @@
               <a class="nav-link text-white" href="dashboard.php"><i class="bi bi-speedometer2 me-1"></i> Dashboard</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link text-white" href="rooms.php"><i class="bi bi-door-closed-fill me-1"></i> Rooms</a>
+              <a class="nav-link text-white" href="users.php">
+                <i class="bi bi-people-fill me-1"></i> Users
+              </a>
             </li>
+
+            <!-- Moved Rooms link down -->
+            <li class="nav-item">
+              <a class="nav-link text-white" href="rooms.php">
+                <i class="bi bi-door-closed-fill me-1"></i> Rooms
+              </a>
+            </li>
+
               <a class="nav-link text-white" href="users_queries.php"><i class="bi bi-people-fill me-1"></i> User Queries</a>
             </li>
             <li class="nav-item"><a class="nav-link text-white" href="features_facilities.php"><i  class="bi bi-stars me-1"></i> Features & Facilities</a></li>

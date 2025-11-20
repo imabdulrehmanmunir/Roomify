@@ -208,7 +208,14 @@
       1024: { slidesPerView: 3 },
     }
   });
-
+// NEW: Check Login for Booking
+function checkLoginToBook(status, room_id){
+    if(status){
+        window.location.href='confirm_booking.php?id='+room_id;
+    } else {
+        alert('Please Login to Book Room!');
+    }
+}
   // Highlight Active Navbar Link
   function setActive() {
     let nav = document.getElementById('nav-bar');

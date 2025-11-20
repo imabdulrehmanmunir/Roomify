@@ -5,16 +5,9 @@
     <div class="swiper-wrapper">
       <?php
         $carousel_r = select_all('carousel');
-        $carousel_data = [];
-        
-        while ($row = mysqli_fetch_assoc($carousel_r)) {
-          $carousel_data[] = $row;
-        }
-        
-        $slide_count = count($carousel_data);
         $path = SITE_URL . 'images/' . CAROUSEL_FOLDER;
-        
-        foreach ($carousel_data as $row) {
+
+        while ($row = mysqli_fetch_assoc($carousel_r)) {
           echo <<<data
             <div class="swiper-slide">
               <img src="$path$row[image]" class="w-100 d-block" style="height: 450px; object-fit: cover;" />
@@ -85,6 +78,13 @@
           $room_thumb = 'images/rooms/1.jpg';
         }
 
+        // Book Now Button Logic
+        $book_btn = "";
+        if (!$settings_r['shutdown']) {
+          $login = (isset($_SESSION['login']) && $_SESSION['login'] === true) ? 1 : 0;
+          $book_btn = "<button onclick='checkLoginToBook($login, $room_data[id])' class='btn btn-sm  text-white custom-bg shadow-none mb-2'>Book Now</button>";
+        }
+
         // Get Features
         $fea_q = mysqli_query($conn, "SELECT f.name FROM `features` f 
           INNER JOIN `room_features` rf ON f.id = rf.features_id 
@@ -92,9 +92,7 @@
 
         $features_data = "";
         while ($fea_row = mysqli_fetch_assoc($fea_q)) {
-          $features_data .= "<span class='badge rounded-pill bg-light text-dark text-wrap me-1 mb-1'>
-              $fea_row[name]
-            </span>";
+          $features_data .= "<span class='badge rounded-pill bg-light text-dark text-wrap me-1 mb-1'>$fea_row[name]</span>";
         }
 
         // Get Facilities
@@ -104,9 +102,7 @@
 
         $facilities_data = "";
         while ($fac_row = mysqli_fetch_assoc($fac_q)) {
-          $facilities_data .= "<span class='badge rounded-pill bg-light text-dark text-wrap me-1 mb-1'>
-              $fac_row[name]
-            </span>";
+          $facilities_data .= "<span class='badge rounded-pill bg-light text-dark text-wrap me-1 mb-1'>$fac_row[name]</span>";
         }
 
         // Render Card
@@ -145,8 +141,8 @@
                   </span>
                 </div>
                 <div class="d-flex justify-content-evenly">
-                  <a href="#" class="btn btn-sm text-white custom-bg shadow-none">Book Now</a>
-                  <a href="room_details.php?id=$room_data[id]" class="btn btn-sm btn-outline-dark shadow-none">More details</a>
+                  $book_btn
+                  <a href="room_details.php?id=$room_data[id]" class="btn btn-outline-dark shadow-none ">More details</a>
                 </div>
               </div>
             </div>
@@ -180,6 +176,7 @@
       <a href="facilities.php" class="btn btn-sm btn-outline-dark rounded-0 fw-bold shadow-none">More Facilities >>></a>
     </div>
   </div>
+</div>
 
   <script src="https://www.gstatic.com/dialogflow-console/fast/messenger/bootstrap.js?v=1"></script>
   <df-messenger
