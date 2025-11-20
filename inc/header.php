@@ -12,10 +12,10 @@
   $values = [2];
   $settings_r = mysqli_fetch_assoc(select($settings_q, $values, "i"));
 
-  // Check login session for User Image
-  if (isset($_SESSION['login']) && $_SESSION['login'] == true) {
-    $path = USERS_FOLDER;
-    $uPic = $_SESSION['uPic'];
+   if(isset($_SESSION['login']) && $_SESSION['login']==true){
+      // MODIFIED: Added SITE_URL and images/ to the path
+      $path = SITE_URL . 'images/' . USERS_FOLDER;
+      $uPic = $_SESSION['uPic'];
   }
 ?>
 <!DOCTYPE html>
