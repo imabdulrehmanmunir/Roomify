@@ -71,7 +71,7 @@ $room_data = mysqli_fetch_assoc($room_res);
         <div class="col-lg-5 col-md-12 px-4">
             <div class="card mb-4 border-0 shadow-sm rounded-3">
                 <div class="card-body">
-                <h4 class="mb-3">₹<?php echo $room_data['price'] ?> per night</h4>
+                <h4 class="mb-3">Rs. <?php echo $room_data['price'] ?> per night</h4>
           
             <!-- NEW: Dynamic Rating -->
             <?php 

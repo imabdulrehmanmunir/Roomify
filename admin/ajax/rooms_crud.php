@@ -79,7 +79,7 @@ if (isset($_POST['get_all_rooms'])) {
                     Children: $row[children]
                 </span>
             </td>
-            <td>₹$row[price]</td>
+            <td>Rs. $row[price]</td>
             <td>$row[quantity]</td>
             <td>$status_btn</td>
             <td>

@@ -1,5 +1,5 @@
 <!-- Footer -->
-<div class="container-fluid bg-dark text-white mt-5">
+<div class="container-fluid bg-white text-dark mt-5">
   <div class="row">
 
     <!-- Site Info -->
@@ -23,13 +23,13 @@
     </div>
 
     <!-- Social Links -->
-    <div class="col-lg-4 p-4">
+    <div class="col-lg-4 p-4 ">
       <h5 class="mb-3">Follow Us</h5>
 
       <?php 
         if ($contact_r['tw'] != '') {
           echo <<<HTML
-            <a href="$contact_r[tw]" class="d-inline-block text-white text-decoration-none mb-2">
+            <a href="$contact_r[tw]" class="d-inline-block text-dark text-decoration-none mb-2">
               <i class="bi bi-twitter-x me-1"></i> Twitter
             </a><br>
           HTML;
@@ -37,7 +37,7 @@
 
         if ($contact_r['fb'] != '') {
           echo <<<HTML
-            <a href="$contact_r[fb]" class="d-inline-block text-white text-decoration-none mb-2">
+            <a href="$contact_r[fb]" class="d-inline-block text-dark text-decoration-none mb-2">
               <i class="bi bi-facebook me-1"></i> Facebook
             </a><br>
           HTML;
@@ -45,7 +45,7 @@
 
         if ($contact_r['insta'] != '') {
           echo <<<HTML
-            <a href="$contact_r[insta]" class="d-inline-block text-white text-decoration-none">
+            <a href="$contact_r[insta]" class="d-inline-block text-dark text-decoration-none">
               <i class="bi bi-instagram me-1"></i> Instagram
             </a>
           HTML;
@@ -56,8 +56,8 @@
   </div>
 </div>
 
-<h6 class="text-center bg-dark text-white p-3 m-0">
-  Designed and Developed by Roomify
+<h6 class="text-center bg-dark text-white  p-3 m-0">
+  Designed and Developed by AbdulRehman & Team
 </h6>
 
 

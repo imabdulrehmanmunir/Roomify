@@ -134,7 +134,7 @@
               $login = (isset($_SESSION['login']) && $_SESSION['login'] === true) ? 1 : 0;
               $book_btn = "<button 
                   onclick='checkLoginToBook($login, $room_data[id])' 
-                  class='btn btn-sm w-100 text-white custom-bg shadow-none mb-2'
+                  class='btn btn-sm  text-white custom-bg shadow-none mb-2'
                   >
                   Book Now
               </button>";
@@ -147,7 +147,7 @@
                 <img src="$room_thumb" class="card-img-top" style="height: 200px; object-fit: cover;">
                 <div class="card-body">
                   <h5>$room_data[name]</h5>
-                  <h6 class="mb-4">₹$room_data[price] per night</h6>
+                  <h6 class="mb-4">Rs. $room_data[price] per night</h6>
                   <div class="features mb-4">
                     <h6 class="mb-1">Features</h6>
                     $features_data
@@ -164,7 +164,7 @@
                   
                   $rating_data
 
-                  <div class="d-flex justify-content-evenly">
+                  <div class="d-flex justify-content-evenly align-items-baseline">
                     $book_btn
                     <a href="room_details.php?id=$room_data[id]" class="btn btn-sm btn-outline-dark shadow-none">More details</a>
                   </div>
@@ -175,7 +175,7 @@
       }
     ?>
     <div class="col-lg-12 text-center mt-5">
-      <a href="rooms.php" class="btn btn-sm btn-outline-dark rounded-0 fw-bold shadow-none">More Rooms >>></a>
+      <a href="room.php" class="btn btn-sm btn-outline-dark rounded-0 fw-bold shadow-none">More Rooms >>></a>
     </div>
   </div>
 </div>
