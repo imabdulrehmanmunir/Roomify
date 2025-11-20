@@ -26,30 +26,40 @@
   <div class="row">
     <div class="col-lg-12 bg-white shadow p-4 rounded">
       <h5 class="mb-4">Check Availability</h5>
-      <form>
+      <form action="room.php">
         <div class="row align-items-end">
           <div class="col-lg-3 mb-3">
             <label class="form-label" style="font-weight: 500;">Check-in</label>
-            <input type="date" class="form-control shadow-none">
+            <input type="date" class="form-control shadow-none" name="checkin" required>
           </div>
           <div class="col-lg-3 mb-3">
             <label class="form-label" style="font-weight: 500;">Check-out</label>
-            <input type="date" class="form-control shadow-none">
+            <input type="date" class="form-control shadow-none" name="checkout" required>
           </div>
+
+          <?php 
+            $guests_q = mysqli_query($conn, "SELECT MAX(adult) AS `max_adult`, MAX(children) AS `max_children` FROM `rooms` WHERE `status`='1' AND `removed`='0'");
+            $guests_res = mysqli_fetch_assoc($guests_q);
+          ?>
+
           <div class="col-lg-2 mb-3">
             <label class="form-label" style="font-weight: 500;">Adults</label>
-            <select class="form-select shadow-none">
-              <option value="1">One</option>
-              <option value="2">Two</option>
-              <option value="3">Three</option>
+            <select class="form-select shadow-none" name="adult">
+              <?php 
+                for ($i = 1; $i <= $guests_res['max_adult']; $i++) {
+                  echo "<option value='$i'>$i</option>";
+                }
+              ?>
             </select>
           </div>
           <div class="col-lg-2 mb-3">
             <label class="form-label" style="font-weight: 500;">Children</label>
-            <select class="form-select shadow-none">
-              <option value="0">Zero</option>
-              <option value="1">One</option>
-              <option value="2">Two</option>
+            <select class="form-select shadow-none" name="children">
+              <?php 
+                for ($i = 0; $i <= $guests_res['max_children']; $i++) {
+                  echo "<option value='$i'>$i</option>";
+                }
+              ?>
             </select>
           </div>
           <div class="col-lg-2 mb-3">
@@ -61,7 +71,7 @@
   </div>
 </div>
 
----
+
 
 <h2 class="mt-5 pt-4 mb-4 text-center fw-bold h-font">OUR ROOMS</h2>
 <div class="container">
@@ -124,7 +134,7 @@
               $login = (isset($_SESSION['login']) && $_SESSION['login'] === true) ? 1 : 0;
               $book_btn = "<button 
                   onclick='checkLoginToBook($login, $room_data[id])' 
-                  class='btn btn-sm text-white custom-bg shadow-none mb-2'
+                  class='btn btn-sm w-100 text-white custom-bg shadow-none mb-2'
                   >
                   Book Now
               </button>";
@@ -154,7 +164,7 @@
                   
                   $rating_data
 
-                  <div class="d-flex gap-2 align-items-baseline justify-content-evenly">
+                  <div class="d-flex justify-content-evenly">
                     $book_btn
                     <a href="room_details.php?id=$room_data[id]" class="btn btn-sm btn-outline-dark shadow-none">More details</a>
                   </div>
@@ -170,7 +180,7 @@
   </div>
 </div>
 
----
+
 
 <h2 class="mt-5 pt-4 mb-4 text-center fw-bold h-font">OUR FACILITIES</h2>
 <div class="container">
@@ -201,7 +211,6 @@
   ></df-messenger>
 </div>
 
----
 
 <h2 class="mt-5 pt-4 mb-4 text-center fw-bold h-font">TESTIMONIALS</h2>
 <div class="container">
@@ -245,7 +254,7 @@
   </div>
 </div>
 
----
+
 
 <h2 class="mt-5 pt-4 mb-4 text-center fw-bold h-font">REACH US</h2>
 <div class="container">
