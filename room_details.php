@@ -138,6 +138,13 @@
             </div>
 
             <a href="#" class="btn btn-sm w-100 text-white custom-bg shadow-none mb-2">Book Now</a>
+                        <?php 
+                if(!$settings_r['shutdown']){
+                    echo <<<data
+                    <a href="#" class="btn btn-sm w-100 text-white custom-bg shadow-none mb-2">Book Now</a>
+                    data;
+                }
+            ?>
         </div>
       </div>
     </div>

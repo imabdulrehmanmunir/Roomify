@@ -16,8 +16,8 @@
                     <h4 class="mt-2">FILTERS</h4>
 
                     <button class="navbar-toggler shadow-none" type="button" data-bs-toggle="collapse"
-                            data-bs-target="#filterDropdown" aria-controls="filterDropdown" aria-expanded="false"
-                            aria-label="Toggle navigation">
+                        data-bs-target="#filterDropdown" aria-controls="filterDropdown" aria-expanded="false"
+                        aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
 
@@ -93,7 +93,11 @@
                     $room_thumb = (mysqli_num_rows($img_res) > 0) 
                         ? SITE_URL."images/".ROOMS_FOLDER.mysqli_fetch_assoc($img_res)['image']
                         : "images/rooms/1.jpg";
-
+                                // MODIFIED: Shutdown check
+                            $book_btn = "";
+                            if(!$settings_r['shutdown']){
+                               $book_btn = "<a href='#' class='btn btn-sm w-100 text-white custom-bg shadow-none mb-2'>Book Now</a>";
+                            }
                     // Features
                     $features_data = "";
                     $fea_q = mysqli_query($conn, "SELECT f.name FROM `features` f 
