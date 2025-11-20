@@ -31,21 +31,38 @@
         $result = json_encode(["status"=>$status]);
     }
     else {
-        // REMOVED: session_start(); (It caused the error because essentials.php already started it)
+        session_start();
+        
+        // MODIFIED: Availability Check
+        // 1. Count overlapping bookings for this room
+        $tb_query = "SELECT COUNT(*) AS `total_bookings` FROM `booking_order`
+            WHERE `booking_status`='booked' 
+            AND `room_id`=? 
+            AND `check_out` > ? AND `check_in` < ?";
+        
+        $values = [$_SESSION['room']['id'], $frm_data['check_in'], $frm_data['check_out']];
+        $tb_fetch = mysqli_fetch_assoc(select($tb_query, $values, 'iss'));
 
-        // Run query to check if room is available (simplified for now)
-        $status = 'available';
-        
-        $count_days = date_diff($checkin_date, $checkout_date)->days;
-        
-        // Ensure session variable exists before math
-        $price = isset($_SESSION['room']['price']) ? $_SESSION['room']['price'] : 0;
-        $payment = $price * $count_days;
+        // 2. Get total room quantity
+        $rq_result = select("SELECT `quantity` FROM `rooms` WHERE `id`=?", [$_SESSION['room']['id']], 'i');
+        $rq_fetch = mysqli_fetch_assoc($rq_result);
 
-        $_SESSION['room']['payment'] = $payment;
-        $_SESSION['room']['available'] = true;
-        
-        $result = json_encode(["status"=>'available', "days"=>$count_days, "payment"=>$payment]);
+        // 3. Calculate availability
+        if(($rq_fetch['quantity'] - $tb_fetch['total_bookings']) <= 0){
+            $status = 'unavailable';
+            $result = json_encode(["status"=>$status]);
+        }
+        else {
+            $status = 'available';
+            $count_days = date_diff($checkin_date, $checkout_date)->days;
+            $price = isset($_SESSION['room']['price']) ? $_SESSION['room']['price'] : 0;
+            $payment = $price * $count_days;
+
+            $_SESSION['room']['payment'] = $payment;
+            $_SESSION['room']['available'] = true;
+            
+            $result = json_encode(["status"=>'available', "days"=>$count_days, "payment"=>$payment]);
+        }
     }
     echo $result;
   }
