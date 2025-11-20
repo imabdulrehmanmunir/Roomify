@@ -65,10 +65,10 @@ if(isset($_POST['get_bookings']))
 if(isset($_POST['assign_room'])){
     $frm_data = filteration($_POST);
 
-    // Updates two tables at once: sets arrival=1 AND assigns room number
+    // MODIFIED: Set rate_review = 0 when assigning room
     $query = "UPDATE `booking_order` bo INNER JOIN `booking_details` bd 
         ON bo.booking_id = bd.booking_id 
-        SET bo.arrival = 1, bd.room_no = ? 
+        SET bo.arrival = 1, bo.rate_review = 0, bd.room_no = ? 
         WHERE bo.booking_id = ?";
     
     $values = [$frm_data['room_no'], $frm_data['booking_id']];

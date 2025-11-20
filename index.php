@@ -1,4 +1,6 @@
-<?php require("inc/header.php"); ?>
+<?php 
+  require("inc/header.php"); 
+?>
 
 <div class="container-fluid px-lg-4 mt-4">
   <div class="swiper swiper-container">
@@ -6,7 +8,7 @@
       <?php
         $carousel_r = select_all('carousel');
         $path = SITE_URL . 'images/' . CAROUSEL_FOLDER;
-
+        
         while ($row = mysqli_fetch_assoc($carousel_r)) {
           echo <<<data
             <div class="swiper-slide">
@@ -59,6 +61,8 @@
   </div>
 </div>
 
+---
+
 <h2 class="mt-5 pt-4 mb-4 text-center fw-bold h-font">OUR ROOMS</h2>
 <div class="container">
   <div class="row">
@@ -66,88 +70,98 @@
       $room_res = select("SELECT * FROM `rooms` WHERE `status`=1 AND `removed`=0 ORDER BY `id` DESC LIMIT 3", [], '');
 
       while ($room_data = mysqli_fetch_assoc($room_res)) {
-        
-        // Get Thumbnail
-        $img_q = "SELECT * FROM `room_images` WHERE `room_id`=? AND `thumb`=1";
-        $img_res = select($img_q, [$room_data['id']], 'i');
+          
+          // Get Thumbnail
+          $img_q = "SELECT * FROM `room_images` WHERE `room_id`=? AND `thumb`=1";
+          $img_res = select($img_q, [$room_data['id']], 'i');
+          
+          if (mysqli_num_rows($img_res) > 0) {
+              $img_row = mysqli_fetch_assoc($img_res);
+              $room_thumb = SITE_URL . 'images/' . ROOMS_FOLDER . $img_row['image'];
+          } else {
+              $room_thumb = 'images/rooms/1.jpg';
+          }
 
-        if (mysqli_num_rows($img_res) > 0) {
-          $img_row = mysqli_fetch_assoc($img_res);
-          $room_thumb = SITE_URL . 'images/' . ROOMS_FOLDER . $img_row['image'];
-        } else {
-          $room_thumb = 'images/rooms/1.jpg';
-        }
+          // Get Features
+          $fea_q = mysqli_query($conn, "SELECT f.name FROM `features` f 
+            INNER JOIN `room_features` rf ON f.id = rf.features_id 
+            WHERE rf.room_id = '$room_data[id]'");
+          
+          $features_data = "";
+          while ($fea_row = mysqli_fetch_assoc($fea_q)) {
+            $features_data .= "<span class='badge rounded-pill bg-light text-dark text-wrap me-1 mb-1'>$fea_row[name]</span>";
+          }
 
-        // Book Now Button Logic
-        $book_btn = "";
-        if (!$settings_r['shutdown']) {
-          $login = (isset($_SESSION['login']) && $_SESSION['login'] === true) ? 1 : 0;
-          $book_btn = "<button onclick='checkLoginToBook($login, $room_data[id])' class='btn btn-sm  text-white custom-bg shadow-none mb-2'>Book Now</button>";
-        }
+          // Get Facilities
+          $fac_q = mysqli_query($conn, "SELECT f.name FROM `facilities` f 
+            INNER JOIN `room_facilities` rf ON f.id = rf.facilities_id 
+            WHERE rf.room_id = '$room_data[id]'");
+          
+          $facilities_data = "";
+          while ($fac_row = mysqli_fetch_assoc($fac_q)) {
+            $facilities_data .= "<span class='badge rounded-pill bg-light text-dark text-wrap me-1 mb-1'>$fac_row[name]</span>";
+          }
 
-        // Get Features
-        $fea_q = mysqli_query($conn, "SELECT f.name FROM `features` f 
-          INNER JOIN `room_features` rf ON f.id = rf.features_id 
-          WHERE rf.room_id = '$room_data[id]'");
+          // Dynamic Rating Calculation
+          $rating_q = "SELECT AVG(rating) AS `avg_rating` FROM `rating_review` WHERE `room_id`='$room_data[id]' ORDER BY `sr_no` DESC LIMIT 20";
+          $rating_res = mysqli_query($conn, $rating_q);
+          $rating_fetch = mysqli_fetch_assoc($rating_res);
+          
+          $rating_data = "";
+          if ($rating_fetch['avg_rating'] != NULL) {
+              $rating_data = "<div class='rating mb-4'>
+                  <h6 class='mb-1'>Rating</h6>
+                  <span class='badge rounded-pill bg-light text-dark text-wrap'>";
+              for ($i = 0; $i < $rating_fetch['avg_rating']; $i++) {
+                  $rating_data .= "<i class='bi bi-star-fill text-warning'></i> ";
+              }
+              $rating_data .= "</span></div>";
+          }
 
-        $features_data = "";
-        while ($fea_row = mysqli_fetch_assoc($fea_q)) {
-          $features_data .= "<span class='badge rounded-pill bg-light text-dark text-wrap me-1 mb-1'>$fea_row[name]</span>";
-        }
+          // Book Button Logic
+          $book_btn = "";
+          if (!$settings_r['shutdown']) {
+              $login = (isset($_SESSION['login']) && $_SESSION['login'] === true) ? 1 : 0;
+              $book_btn = "<button 
+                  onclick='checkLoginToBook($login, $room_data[id])' 
+                  class='btn btn-sm text-white custom-bg shadow-none mb-2'
+                  >
+                  Book Now
+              </button>";
+          }
 
-        // Get Facilities
-        $fac_q = mysqli_query($conn, "SELECT f.name FROM `facilities` f 
-          INNER JOIN `room_facilities` rf ON f.id = rf.facilities_id 
-          WHERE rf.room_id = '$room_data[id]'");
+          // Render Card
+          echo <<<data
+            <div class="col-lg-4 col-md-6 my-3">
+              <div class="card border-0 shadow" style="max-width: 350px; margin: auto;">
+                <img src="$room_thumb" class="card-img-top" style="height: 200px; object-fit: cover;">
+                <div class="card-body">
+                  <h5>$room_data[name]</h5>
+                  <h6 class="mb-4">₹$room_data[price] per night</h6>
+                  <div class="features mb-4">
+                    <h6 class="mb-1">Features</h6>
+                    $features_data
+                  </div>
+                  <div class="facilities mb-4">
+                    <h6 class="mb-1">Facilites</h6>
+                    $facilities_data
+                  </div>
+                  <div class="guests mb-4">
+                    <h6 class="mb-1">Guests</h6>
+                    <span class="badge rounded-pill bg-light text-dark text-wrap">$room_data[adult] Adults</span>
+                    <span class="badge rounded-pill bg-light text-dark text-wrap">$room_data[children] Children</span>
+                  </div>
+                  
+                  $rating_data
 
-        $facilities_data = "";
-        while ($fac_row = mysqli_fetch_assoc($fac_q)) {
-          $facilities_data .= "<span class='badge rounded-pill bg-light text-dark text-wrap me-1 mb-1'>$fac_row[name]</span>";
-        }
-
-        // Render Card
-        echo <<<data
-          <div class="col-lg-4 col-md-6 my-3">
-            <div class="card border-0 shadow" style="max-width: 350px; margin: auto;">
-              <img src="$room_thumb" class="card-img-top" style="height: 200px; object-fit: cover;">
-              <div class="card-body">
-                <h5>$room_data[name]</h5>
-                <h6 class="mb-4">₹$room_data[price] per night</h6>
-                <div class="features mb-4">
-                  <h6 class="mb-1">Features</h6>
-                  $features_data
-                </div>
-                <div class="facilities mb-4">
-                  <h6 class="mb-1">Facilites</h6>
-                  $facilities_data
-                </div>
-                <div class="guests mb-4">
-                  <h6 class="mb-1">Guests</h6>
-                  <span class="badge rounded-pill bg-light text-dark text-wrap">
-                    $room_data[adult] Adults
-                  </span>
-                  <span class="badge rounded-pill bg-light text-dark text-wrap">
-                    $room_data[children] Children
-                  </span>
-                </div>
-                <div class="ratings mb-4">
-                  <h6 class="mb-1">Ratings</h6>
-                  <span class="badge rounded-pill bg-light ">
-                    <i class="bi bi-star-fill text-warning"></i>
-                    <i class="bi bi-star-fill text-warning"></i>
-                    <i class="bi bi-star-fill text-warning"></i>
-                    <i class="bi bi-star-fill text-warning"></i>
-                    <i class="bi bi-star-half text-warning"></i>
-                  </span>
-                </div>
-                <div class="d-flex justify-content-evenly">
-                  $book_btn
-                  <a href="room_details.php?id=$room_data[id]" class="btn btn-outline-dark shadow-none ">More details</a>
+                  <div class="d-flex gap-2 align-items-baseline justify-content-evenly">
+                    $book_btn
+                    <a href="room_details.php?id=$room_data[id]" class="btn btn-sm btn-outline-dark shadow-none">More details</a>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        data;
+          data;
       }
     ?>
     <div class="col-lg-12 text-center mt-5">
@@ -156,13 +170,14 @@
   </div>
 </div>
 
+---
+
 <h2 class="mt-5 pt-4 mb-4 text-center fw-bold h-font">OUR FACILITIES</h2>
 <div class="container">
   <div class="row justify-content-evenly px-5 px-md-0 px-lg-0">
     <?php
       $res = mysqli_query($conn, "SELECT * FROM `facilities` ORDER BY `id` DESC LIMIT 5");
       $path = SITE_URL . 'images/' . FACILITIES_FOLDER;
-      
       while ($row = mysqli_fetch_assoc($res)) {
         echo <<<data
           <div class="col-lg-2 col-md-2 text-center bg-white rounded shadow py-4 my-3">
@@ -176,7 +191,6 @@
       <a href="facilities.php" class="btn btn-sm btn-outline-dark rounded-0 fw-bold shadow-none">More Facilities >>></a>
     </div>
   </div>
-</div>
 
   <script src="https://www.gstatic.com/dialogflow-console/fast/messenger/bootstrap.js?v=1"></script>
   <df-messenger
@@ -187,69 +201,51 @@
   ></df-messenger>
 </div>
 
+---
+
 <h2 class="mt-5 pt-4 mb-4 text-center fw-bold h-font">TESTIMONIALS</h2>
 <div class="container">
   <div class="swiper swiper-testimonial">
     <div class="swiper-wrapper">
-      
-      <div class="swiper-slide bg-white p-4 ">
-        <div class="profile d-flex align-items-center mb-3">
-          <img src="images/facilities/wifi.svg" style="width: 30px;">
-          <h6 class="m-0 ms-2">Random user1</h6>
-        </div>
-        <p>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit.
-          Id nemo excepturi, incidunt qui libero at omnis iure
-          magni tempora ea.
-        </p>
-        <div class="rating">
-          <i class="bi bi-star-fill text-warning"></i>
-          <i class="bi bi-star-fill text-warning"></i>
-          <i class="bi bi-star-fill text-warning"></i>
-          <i class="bi bi-star-fill text-warning"></i>
-        </div>
-      </div>
+      <?php
+        // Fetch latest 6 reviews
+        $review_q = "SELECT rr.*, uc.name AS uname, uc.profile, r.name AS rname 
+          FROM `rating_review` rr 
+          INNER JOIN `user_cred` uc ON rr.user_id = uc.id 
+          INNER JOIN `rooms` r ON rr.room_id = r.id 
+          ORDER BY `sr_no` DESC LIMIT 6";
+        
+        $review_res = mysqli_query($conn, $review_q);
+        $img_path = SITE_URL . 'images/' . USERS_FOLDER;
 
-      <div class="swiper-slide bg-white p-4 ">
-        <div class="profile d-flex align-items-center mb-3">
-          <img src="images/facilities/wifi.svg" style="width: 30px;">
-          <h6 class="m-0 ms-2">Random user1</h6>
-        </div>
-        <p>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit.
-          Id nemo excepturi, incidunt qui libero at omnis iure
-          magni tempora ea.
-        </p>
-        <div class="rating">
-          <i class="bi bi-star-fill text-warning"></i>
-          <i class="bi bi-star-fill text-warning"></i>
-          <i class="bi bi-star-fill text-warning"></i>
-          <i class="bi bi-star-fill text-warning"></i>
-        </div>
-      </div>
-
-      <div class="swiper-slide bg-white p-4 ">
-        <div class="profile d-flex align-items-center mb-3">
-          <img src="images/facilities/wifi.svg" style="width: 30px;">
-          <h6 class="m-0 ms-2">Random user1</h6>
-        </div>
-        <p>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit.
-          Id nemo excepturi, incidunt qui libero at omnis iure
-          magni tempora ea.
-        </p>
-        <div class="rating">
-          <i class="bi bi-star-fill text-warning"></i>
-          <i class="bi bi-star-fill text-warning"></i>
-          <i class="bi bi-star-fill text-warning"></i>
-          <i class="bi bi-star-fill text-warning"></i>
-        </div>
-      </div>
-
+        if (mysqli_num_rows($review_res) == 0) {
+          echo '<div class="col-12 text-center py-4">No reviews yet!</div>';
+        } else {
+          while ($row = mysqli_fetch_assoc($review_res)) {
+            $stars = "";
+            for ($i = 0; $i < $row['rating']; $i++) {
+              $stars .= "<i class='bi bi-star-fill text-warning'></i> ";
+            }
+            
+            echo <<<slides
+              <div class="swiper-slide bg-white p-4">
+                <div class="profile d-flex align-items-center mb-3">
+                  <img src="$img_path$row[profile]" class="rounded-circle" loading="lazy" style="width: 30px; height: 30px;">
+                  <h6 class="m-0 ms-2">$row[uname]</h6>
+                </div>
+                <p>$row[review]</p>
+                <div class="rating">$stars</div>
+              </div>
+            slides;
+          }
+        }
+      ?>
     </div>
     <div class="swiper-pagination-testimonial"></div>
   </div>
 </div>
+
+---
 
 <h2 class="mt-5 pt-4 mb-4 text-center fw-bold h-font">REACH US</h2>
 <div class="container">
@@ -276,7 +272,7 @@
       </div>
       <div class="bg-white p-4 rounded">
         <h5>Follow us</h5>
-        <?php
+        <?php 
           if ($contact_r['tw'] != '') {
             echo <<<data
               <a href="$contact_r[tw]" class="d-inline-block mb-3 text-dark text-decoration-none">
@@ -304,34 +300,6 @@
   </div>
 </div>
 
-<?php require("inc/footer.php"); ?>
-
-<?php
-  if (isset($_GET['account_recovery'])) {
-    $data = filteration($_GET);
-    $t_date = date("Y-m-d");
-
-    $query = select(
-      "SELECT * FROM `user_cred` WHERE `email`=? AND `token`=? AND `t_expire`=? LIMIT 1",
-      [$data['email'], $data['token'], $t_date],
-      'sss'
-    );
-
-    if (mysqli_num_rows($query) == 1) {
-      echo <<<showModal
-        <script>
-          var myModal = document.getElementById('recoveryModal');
-          
-          // Populate hidden inputs
-          myModal.querySelector("input[name='email']").value = '$data[email]';
-          myModal.querySelector("input[name='token']").value = '$data[token]';
-
-          var modal = new bootstrap.Modal(myModal);
-          modal.show();
-        </script>
-      showModal;
-    } else {
-      echo "<script>alert('Invalid or Expired Link!');</script>";
-    }
-  }
+<?php 
+  require("inc/footer.php"); 
 ?>
